@@ -24,7 +24,7 @@ public interface AuthApi {
     @POST("/api/user/updateName")
     Call<ResponseBody> updateName(@Body UserRequest userRequest);
 
-    @POST("/api/user/purchase_ticket")
+    @POST("/api/otp/month_ticket")
     Call<ResponseBody> purchase(@Body Map<String, Object> requestBody);
 
     @POST("/api/otp/verify-otp")

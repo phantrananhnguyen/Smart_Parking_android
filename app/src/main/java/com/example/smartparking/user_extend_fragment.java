@@ -107,7 +107,19 @@ public class user_extend_fragment extends Fragment {
         });
         sendbtn.setOnClickListener(v -> {
             if (isInputValid()) {
-                handleSubmit();
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Attention!!!")
+                        .setMessage("Make sure your information is correct? We will not be responsible for any incorrect information. ")
+                        .setPositiveButton("OK", (dialogInterface, which) -> {
+                            handleSubmit();
+                            dialogInterface.dismiss();
+                        })
+                        .setNegativeButton("Cancel", (dialogInterface, which) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .create();
+
+                dialog.show();
             }
             else {
                 showErrorDialog();
@@ -135,20 +147,7 @@ public class user_extend_fragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    AlertDialog dialog = new AlertDialog.Builder(getContext())
-                            .setTitle("Attention!!!")
-                            .setMessage("Make sure your information is correct? We will not be responsible for any incorrect information. ")
-                            .setPositiveButton("OK", (dialogInterface, which) -> {
-                                showSuccessDialog();
-                                dialogInterface.dismiss();
-                            })
-                            .setNegativeButton("Cancel", (dialogInterface, which) -> {
-                                dialogInterface.dismiss();
-                            })
-                            .create();
-
-                    dialog.show();
-
+                    showSuccessDialog();
                 }
             }
 
@@ -166,36 +165,47 @@ public class user_extend_fragment extends Fragment {
 
         EditText code_enter = dialogView.findViewById(R.id.edt_otp);
         Button submit = dialogView.findViewById(R.id.confirm);
+
         androidx.appcompat.app.AlertDialog dialog = builder.create();
-        String email = UserSession.getInstance().getEmail();
-        String OTP = code_enter.getText().toString().trim();
-        SendOtpRequest otpRequest = new SendOtpRequest(email,OTP);
+        dialog.show();
+
         submit.setOnClickListener(v -> {
-            if (!OTP.isEmpty()) {
-                SendOTP(otpRequest);
-            }
-            else {
+            String otp = code_enter.getText().toString().trim();
+            if (!otp.isEmpty()) {
+                String email = UserSession.getInstance().getEmail();
+                SendOtpRequest otpRequest = new SendOtpRequest(email, otp);
+                SendOTP(otpRequest, dialog);  // Truyền dialog vào đây để chủ động đóng khi cần
+            } else {
                 Toast.makeText(getContext(), "Please enter the code", Toast.LENGTH_SHORT).show();
             }
-            dialog.dismiss();
         });
-        dialog.show();
     }
-    private void SendOTP(SendOtpRequest otpRequest){
+
+    private void SendOTP(SendOtpRequest otpRequest, androidx.appcompat.app.AlertDialog dialog) {
         authApi.sendOTP(otpRequest).enqueue(new Callback<OtpResponse>() {
             @Override
             public void onResponse(Call<OtpResponse> call, Response<OtpResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String message = response.body().getMessage();
                     Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+
+                    if (message.toLowerCase().contains("success")) {
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(getContext(), "Mã OTP không đúng. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Có lỗi xảy ra. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<OtpResponse> call, Throwable throwable) {
                 Toast.makeText(getContext(), "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     private int getMonthAmount(CheckBox checkbox1, CheckBox checkbox2, CheckBox checkbox3) {
         int amount = 0;
         if (checkbox1.isChecked()) {

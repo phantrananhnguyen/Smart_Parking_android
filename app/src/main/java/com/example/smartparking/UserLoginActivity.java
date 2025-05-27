@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserLoginActivity extends AppCompatActivity {
+public class UserLoginActivity extends BaseActivity {
     ImageButton back;
     Button signin, signup;
     TextView forgotpass;

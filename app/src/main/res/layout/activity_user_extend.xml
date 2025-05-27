@@ -13,72 +13,31 @@
         android:orientation="vertical"
         tools:context=".user_extend_fragment"
         android:background="@color/white">
-
-        <LinearLayout
-            android:id="@+id/topbar"
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_icon"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"/>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_top"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="10dp">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp">
+                android:text="SIGN UP FOR MONTHLY TICKET"
+                android:textColor="@color/main_color"
+                android:textStyle="bold"
+                android:elevation="4dp"
+                android:textSize="25sp"
+                android:padding="15dp"
+                android:textAlignment="center"/>
 
-                <!-- ImageView (centered horizontally) -->
-                <ImageView
-                    android:id="@+id/github_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/github_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"/>
-
-                <!-- ImageButton (to the left of ImageView) -->
-                <ImageButton
-                    android:id="@+id/back"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="96dp"
-                    android:background="@drawable/back_icon"
-                    android:contentDescription="@string/back_button"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintEnd_toStartOf="@id/github_icon"
-                    app:layout_constraintTop_toTopOf="@id/github_icon" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="USER"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="4dp"
-                    android:textSize="25sp"
-                    android:padding="15dp"
-                    android:textAlignment="center"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="USER"
-                    android:textColor="#4091AE"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:layout_marginTop="3dp"
-                    android:padding="15dp"
-                    android:textAlignment="center"/>
-            </RelativeLayout>
-        </LinearLayout>
-
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -139,7 +98,7 @@
                 android:id="@+id/car_spin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
+                android:padding="15dp"
                 android:background="@drawable/popup_bg"
                 android:backgroundTint="#D9D9D9"
                 android:textColor="@color/black"

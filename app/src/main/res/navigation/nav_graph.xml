@@ -8,27 +8,24 @@
         android:id="@+id/nav_home"
         android:name="com.example.smartparking.HomeFragment"
         android:label="Home" />
-
-    <!-- Fragment đầu tiên trong Ticket -->
     <fragment
-        android:id="@+id/ticketFragment1"
+        android:id="@+id/nav_person"
         android:name="com.example.smartparking.TicketFragment"
         android:label="Ticket">
         <action
             android:id="@+id/action_ticketFragment1_to_ticketFragment2"
             app:destination="@id/ticketFragment2"
-            app:popUpTo="@id/ticketFragment1"
+            app:popUpTo="@id/nav_person"
             app:popUpToInclusive="false"/>
     </fragment>
 
-    <!-- Fragment thứ hai trong Ticket -->
     <fragment
         android:id="@+id/ticketFragment2"
         android:name="com.example.smartparking.user_extend_fragment"
         android:label="Ticket 2" >
         <action
             android:id="@+id/action_ticketFragment2_to_ticketFragment1"
-            app:destination="@id/ticketFragment1"
+            app:destination="@id/nav_person"
             app:popUpTo="@id/ticketFragment2"
             app:popUpToInclusive="true"/>
     </fragment>

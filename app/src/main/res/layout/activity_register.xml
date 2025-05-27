@@ -95,7 +95,10 @@
                     android:textSize="@dimen/input_text_size"
                     android:autofillHints="emailAddress"
                     android:importantForAutofill="yes"
-                    android:minHeight="48dp"/>
+                    android:minHeight="48dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    />
                 />
                 <TextView
                     android:layout_width="wrap_content"
