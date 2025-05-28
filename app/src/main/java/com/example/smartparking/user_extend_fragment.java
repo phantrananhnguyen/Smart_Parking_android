@@ -35,6 +35,8 @@ import com.example.smartparking.Models.UserRequest;
 import com.example.smartparking.Models.UserSession;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
@@ -139,11 +141,15 @@ public class user_extend_fragment extends Fragment {
         String carbrand = carbrands.getSelectedItem().toString();
         String owner = UserSession.getInstance().getName();
         int amount = getMonthAmount(checkbox1, checkbox2, checkbox3);
-        MonthTicket monthTicket = new MonthTicket(carplate, carbrand,owner,"", amount);
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("email", email);
-        requestBody.put("monthTicket", monthTicket);
-        authApi.purchase(requestBody).enqueue(new Callback<ResponseBody>() {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusMonths(amount);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        String startDate = start.format(formatter);
+        String endDate = end.format(formatter);
+
+        MonthTicket monthTicket = new MonthTicket(carplate, carbrand, owner,email, amount, startDate, endDate);
+        authApi.purchase(monthTicket).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -191,6 +197,7 @@ public class user_extend_fragment extends Fragment {
 
                     if (message.toLowerCase().contains("success")) {
                         dialog.dismiss();
+                        Navigation.findNavController(requireView()).popBackStack();
                     } else {
                         Toast.makeText(getContext(), "Mã OTP không đúng. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                     }

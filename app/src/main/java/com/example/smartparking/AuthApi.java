@@ -1,17 +1,21 @@
 package com.example.smartparking;
 
 import com.example.smartparking.Models.LoginResponse;
+import com.example.smartparking.Models.MonthTicket;
 import com.example.smartparking.Models.OtpResponse;
 import com.example.smartparking.Models.SendOtpRequest;
 import com.example.smartparking.Models.UserRequest;
 import com.example.smartparking.Models.Userlogin;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface AuthApi {
 
@@ -25,9 +29,12 @@ public interface AuthApi {
     Call<ResponseBody> updateName(@Body UserRequest userRequest);
 
     @POST("/api/otp/month_ticket")
-    Call<ResponseBody> purchase(@Body Map<String, Object> requestBody);
+    Call<ResponseBody> purchase(@Body MonthTicket monthTicket);
 
     @POST("/api/otp/verify-otp")
     Call<OtpResponse> sendOTP(@Body SendOtpRequest sendOtpRequest);
+
+    @GET("/api/otp/history")
+    Call<List<MonthTicket>> fetchHistory(@Query("email") String email);
 }
 
