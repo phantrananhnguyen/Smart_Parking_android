@@ -3,6 +3,7 @@ package com.example.smartparking;
 import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,12 +25,17 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smartparking.Models.ApiClient;
 import com.example.smartparking.Models.MonthTicket;
 import com.example.smartparking.Models.OtpResponse;
+import com.example.smartparking.Models.QRCodeRequest;
+import com.example.smartparking.Models.QRCodeResponse;
+import com.example.smartparking.Models.QrData;
 import com.example.smartparking.Models.SendOtpRequest;
 import com.example.smartparking.Models.UserRequest;
 import com.example.smartparking.Models.UserSession;
@@ -164,30 +170,35 @@ public class user_extend_fragment extends Fragment {
         });
     }
     private void showSuccessDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.provide_mail_code, null);
-        builder.setView(dialogView);
+        Dialog dialogView = new Dialog(requireContext());
+        dialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogView.setContentView(R.layout.provide_mail_code);
+
+        Window window = dialogView.getWindow();
+        if(window !=null){
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setGravity(Gravity.CENTER);
+        }
 
         EditText code_enter = dialogView.findViewById(R.id.edt_otp);
         Button submit = dialogView.findViewById(R.id.confirm);
 
-        androidx.appcompat.app.AlertDialog dialog = builder.create();
-        dialog.show();
+        dialogView.show();
 
         submit.setOnClickListener(v -> {
             String otp = code_enter.getText().toString().trim();
             if (!otp.isEmpty()) {
                 String email = UserSession.getInstance().getEmail();
                 SendOtpRequest otpRequest = new SendOtpRequest(email, otp);
-                SendOTP(otpRequest, dialog);  // Truyền dialog vào đây để chủ động đóng khi cần
+                SendOTP(otpRequest, dialogView);  // Truyền dialog vào đây để chủ động đóng khi cần
             } else {
                 Toast.makeText(getContext(), "Please enter the code", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void SendOTP(SendOtpRequest otpRequest, androidx.appcompat.app.AlertDialog dialog) {
+    private void SendOTP(SendOtpRequest otpRequest, Dialog dialog) {
         authApi.sendOTP(otpRequest).enqueue(new Callback<OtpResponse>() {
             @Override
             public void onResponse(Call<OtpResponse> call, Response<OtpResponse> response) {
@@ -197,7 +208,7 @@ public class user_extend_fragment extends Fragment {
 
                     if (message.toLowerCase().contains("success")) {
                         dialog.dismiss();
-                        Navigation.findNavController(requireView()).popBackStack();
+                        requestQRCodeFromAPI();
                     } else {
                         Toast.makeText(getContext(), "Mã OTP không đúng. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                     }
@@ -224,22 +235,58 @@ public class user_extend_fragment extends Fragment {
         }
         return amount;
     }
-    private void openFeedbackDialog(int gravity){
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.provide_mail_code);
+    private void requestQRCodeFromAPI() {
+        String plate = car_plate.getText().toString();
+        String email = UserSession.getInstance().getEmail();
+        int months = getMonthAmount(checkbox1, checkbox2, checkbox3);
 
-        Window window = dialog.getWindow();
-        if (window == null){
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = gravity;
-        window.setAttributes(windowAttributes);
-        dialog.show();
+        QRCodeRequest request = new QRCodeRequest(plate, months, email);
+        authApi.getQRCode(request).enqueue(new Callback<QRCodeResponse>() {
+            @Override
+            public void onResponse(Call<QRCodeResponse> call, Response<QRCodeResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    QrData data = response.body().getData();
+                    String imageBase64 = data.getQrImage();
+                    showQRPopup(imageBase64);
+                } else {
+                    Toast.makeText(getContext(), "Lấy QR thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<QRCodeResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showQRPopup(String base64Image) {
+        Dialog qrDialog = new Dialog(requireContext());
+        qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        qrDialog.setContentView(R.layout.popup_qr_payment);
+
+        ImageView qrImageView = qrDialog.findViewById(R.id.img_qr_code);
+        TextView paymentInfo = qrDialog.findViewById(R.id.txt_payment_info);
+        Button btnDone = qrDialog.findViewById(R.id.btn_done);
+
+        // Chuyển base64 -> Bitmap
+        byte[] decodedString = android.util.Base64.decode(base64Image.split(",")[1], android.util.Base64.DEFAULT);
+        Bitmap decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        qrImageView.setImageBitmap(decodedByte);
+
+        // Hiển thị thông tin thanh toán (tuỳ anh muốn hiển thị gì)
+        String paymentDetails = "Chủ xe: " + UserSession.getInstance().getName() +
+                "\nEmail: " + UserSession.getInstance().getEmail() +
+                "\nBiển số: " + car_plate.getText().toString() +
+                "\nGói: " + getMonthAmount(checkbox1, checkbox2, checkbox3) + " tháng";
+
+        paymentInfo.setText(paymentDetails);
+
+        btnDone.setOnClickListener(v -> {
+            qrDialog.dismiss();
+            Navigation.findNavController(requireView()).popBackStack();
+        });
+        qrDialog.show();
     }
 
     private void showErrorDialog() {

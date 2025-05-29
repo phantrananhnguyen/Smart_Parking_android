@@ -3,7 +3,10 @@ package com.example.smartparking;
 import com.example.smartparking.Models.LoginResponse;
 import com.example.smartparking.Models.MonthTicket;
 import com.example.smartparking.Models.OtpResponse;
+import com.example.smartparking.Models.QRCodeRequest;
+import com.example.smartparking.Models.QRCodeResponse;
 import com.example.smartparking.Models.SendOtpRequest;
+import com.example.smartparking.Models.Slot;
 import com.example.smartparking.Models.UserRequest;
 import com.example.smartparking.Models.Userlogin;
 
@@ -36,5 +39,11 @@ public interface AuthApi {
 
     @GET("/api/otp/history")
     Call<List<MonthTicket>> fetchHistory(@Query("email") String email);
+
+    @GET("/api/otp/status")
+    Call<List<Slot>> fetchStatus();
+    @POST("api/qr/get-qr")
+    Call<QRCodeResponse> getQRCode(@Body QRCodeRequest request);
+
 }
 

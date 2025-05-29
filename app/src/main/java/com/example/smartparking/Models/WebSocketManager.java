@@ -1,15 +1,27 @@
 package com.example.smartparking.Models;
 
 import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.*;
 
 public class WebSocketManager {
 
     private static final String TAG = "WebSocketManager";
-    private static final String SERVER_URL = "ws://10.0.2.2:3000"; // Đổi IP nếu cần
+    private static final String SERVER_URL = "ws://10.0.2.2:3000"; // Thay bằng IP thật khi chạy trên thiết bị
 
     private WebSocket webSocket;
     private OkHttpClient client;
+    private WebSocketCallback callback;
+
+    public interface WebSocketCallback {
+        void onSlotUpdate(String slot, String status);
+    }
+
+    public void setWebSocketCallback(WebSocketCallback callback) {
+        this.callback = callback;
+    }
 
     public void start() {
         client = new OkHttpClient();
@@ -22,14 +34,37 @@ public class WebSocketManager {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 Log.d(TAG, "✅ WebSocket connected");
-                webSocket.send("Hello from Android!");
+
+                // Gửi sự kiện đăng ký là dashboard
+                JSONObject registerMsg = new JSONObject();
+                try {
+                    registerMsg.put("event", "register");
+                    registerMsg.put("type", "dashboard");
+                    webSocket.send(registerMsg.toString());
+                } catch (JSONException e) {
+                    Log.e(TAG, "❌ JSON error", e);
+                }
             }
 
             @Override
             public void onMessage(WebSocket webSocket, String text) {
                 Log.d(TAG, "📩 Message received: " + text);
+                try {
+                    JSONObject json = new JSONObject(text);
+                    String event = json.optString("event");
 
-                // TODO: Xử lý dữ liệu ở đây (ví dụ: cập nhật UI, gửi vào ViewModel, ...)
+                    if ("slot_update".equals(event)) {
+                        String slot = json.optString("slot");
+                        String status = json.optString("status");
+
+                        if (callback != null) {
+                            callback.onSlotUpdate(slot, status);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "❌ JSON parse error", e);
+                }
             }
 
             @Override

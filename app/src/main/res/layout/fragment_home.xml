@@ -121,20 +121,38 @@
                     android:layout_weight="1"
                     android:layout_margin="1dp"
                     android:orientation="horizontal">
-
-                    <ImageView
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:background="@drawable/border" />
+                        android:padding="5dp"
+                        android:background="@drawable/border">
+                        <ImageView
+                            android:id="@+id/A1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:scaleType="fitCenter"
+                             />
+                    </RelativeLayout>
 
-                    <ImageView
+
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:background="@drawable/border" />
+                        android:padding="5dp"
+                        android:background="@drawable/border">
+                        <ImageView
+                            android:id="@+id/A2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:scaleType="fitCenter"
+                            />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
             <View
@@ -152,18 +170,36 @@
                     android:layout_weight="1"
                     android:layout_margin="1dp"
                     android:orientation="horizontal">
-                    <ImageView
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="1dp"
-                        android:background="@drawable/border"/>
-                    <ImageView
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:background="@drawable/border">
+                        <ImageView
+                            android:id="@+id/A3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:scaleType="fitCenter"
+                            />
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="1dp"
-                        android:background="@drawable/border"/>
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:background="@drawable/border">
+                        <ImageView
+                            android:id="@+id/A4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:scaleType="fitCenter"
+                            />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -184,23 +220,41 @@
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:orientation="vertical">
-                <ImageView
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:background="@drawable/border"
-                    android:layout_margin="1dp"/>
+                    android:padding="5dp"
+                    android:background="@drawable/border">
+                    <ImageView
+                        android:id="@+id/B1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:scaleType="fitCenter"
+                        />
+                </RelativeLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     />
 
-                <ImageView
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="1dp"
                     android:layout_weight="1"
-                    android:background="@drawable/border"
-                    android:layout_margin="1dp"/>
+                    android:padding="5dp"
+                    android:background="@drawable/border">
+                    <ImageView
+                        android:id="@+id/B2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:scaleType="fitCenter"
+                        />
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
