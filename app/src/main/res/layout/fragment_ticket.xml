@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="INFOMATION"
+                android:text="MONTH TICKETS"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:elevation="4dp"
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="INFOMATION"
+                android:text="MONTH TICKETS"
                 android:textColor="#4091AE"
                 android:textStyle="bold"
                 android:textSize="25sp"

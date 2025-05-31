@@ -8,6 +8,7 @@
     import android.view.ViewGroup;
     import android.widget.Button;
     import android.widget.ImageButton;
+    import android.widget.Toast;
 
     import androidx.fragment.app.Fragment;
     import androidx.fragment.app.FragmentManager;
@@ -53,7 +54,12 @@
 
             ImageButton addticket = view.findViewById(R.id.add);
             addticket.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(R.id.action_ticketFragment1_to_ticketFragment2);
+                if (UserSession.getInstance().getTicketStatus().equals("Expired")){
+                    Navigation.findNavController(v).navigate(R.id.action_ticketFragment1_to_ticketFragment2);
+                }
+                else {
+                    Toast.makeText(getContext(), "You have a valid ticket. Please wait", Toast.LENGTH_SHORT).show();
+                }
             });
 
             return view;

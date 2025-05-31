@@ -19,6 +19,10 @@ public class WebSocketManager {
         void onSlotUpdate(String slot, String status);
     }
 
+    public boolean isConnected() {
+        return webSocket != null;
+    }
+
     public void setWebSocketCallback(WebSocketCallback callback) {
         this.callback = callback;
     }

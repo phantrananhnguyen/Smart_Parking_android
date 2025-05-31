@@ -6,8 +6,16 @@ public class UserSession {
     private String name;
     private String email;
     private String token;// nếu có
-
+    private String ticketStatus;
     private UserSession() {
+    }
+
+    public String getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
     public static UserSession getInstance() {
@@ -48,5 +56,6 @@ public class UserSession {
         name = null;
         email = null;
         token = null;
+        ticketStatus = null;
     }
 }

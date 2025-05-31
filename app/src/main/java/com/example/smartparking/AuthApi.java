@@ -3,6 +3,7 @@ package com.example.smartparking;
 import com.example.smartparking.Models.LoginResponse;
 import com.example.smartparking.Models.MonthTicket;
 import com.example.smartparking.Models.OtpResponse;
+import com.example.smartparking.Models.ProfileResponse;
 import com.example.smartparking.Models.QRCodeRequest;
 import com.example.smartparking.Models.QRCodeResponse;
 import com.example.smartparking.Models.SendOtpRequest;
@@ -45,5 +46,7 @@ public interface AuthApi {
     @POST("api/qr/get-qr")
     Call<QRCodeResponse> getQRCode(@Body QRCodeRequest request);
 
+    @GET("/api/otp/profile")
+    Call<ProfileResponse> fetchProfile(@Query("email") String email);
 }
 
