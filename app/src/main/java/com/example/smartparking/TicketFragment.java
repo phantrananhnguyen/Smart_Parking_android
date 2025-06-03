@@ -54,12 +54,7 @@
 
             ImageButton addticket = view.findViewById(R.id.add);
             addticket.setOnClickListener(v -> {
-                if (UserSession.getInstance().getTicketStatus().equals("Expired")){
                     Navigation.findNavController(v).navigate(R.id.action_ticketFragment1_to_ticketFragment2);
-                }
-                else {
-                    Toast.makeText(getContext(), "You have a valid ticket. Please wait", Toast.LENGTH_SHORT).show();
-                }
             });
 
             return view;
