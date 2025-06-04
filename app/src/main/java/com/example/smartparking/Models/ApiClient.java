@@ -42,7 +42,7 @@ public class ApiClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://0c5b-42-119-205-123.ngrok-free.app") // Đổi nếu cần
+                    .baseUrl("https://a13c-14-161-6-190.ngrok-free.app") // Đổi nếu cần
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

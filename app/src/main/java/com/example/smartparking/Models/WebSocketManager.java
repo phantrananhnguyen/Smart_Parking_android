@@ -9,7 +9,7 @@ import okhttp3.*;
 public class WebSocketManager {
 
     private static final String TAG = "WebSocketManager";
-    private static final String SERVER_URL = "wss://0c5b-42-119-205-123.ngrok-free.app"; // Thay bằng IP thật khi chạy trên thiết bị
+    private static final String SERVER_URL = "wss://a13c-14-161-6-190.ngrok-free.app"; // Thay bằng IP thật khi chạy trên thiết bị
 
     private WebSocket webSocket;
     private OkHttpClient client;
